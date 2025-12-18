@@ -1,0 +1,46 @@
+name: Run Tests
+
+on:
+  pull_request:
+    branches: [main]
+
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  lint:
+    uses: ./.github/workflows/lint.yml
+
+  test:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Set up Docker Compose
+        uses: docker/setup-compose-action@v1
+        with:
+          version: latest
+
+      - name: Start Postgres DB
+        run: docker compose up -d
+
+      - name: Wait for Postgres DB to start
+        run: sleep 10
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run migrations
+        run: PYTHONPATH=src python src/example/manage.py migrate
+
+      - name: Run tests
+        run: PYTHONPATH=src python src/example/manage.py test ./tests/
