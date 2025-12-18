@@ -20,7 +20,7 @@ jobs:
           python-version: "3.13"
 
       - name: Intall dependencies
-        run: pip install mkdocs mkdocs-material pip install pygments
+        run: pip install mkdocs mkdocs-material pygments
 
       - name: Deploy to GitHub Pages
         run: mkdocs gh-deploy --clean
