@@ -1,15 +1,12 @@
-name: Run Tests
+name: Lint and Format
 
 on:
-  pull_request:
-    branches: [main]
-
   workflow_dispatch:
   workflow_call:
 
 jobs:
   lint:
-    name: Lint Code
+    name: Lint Code Checks
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
