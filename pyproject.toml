@@ -1,0 +1,138 @@
+[build-system]
+requires = ["setuptools>=70", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["paradedb*"]
+namespaces = false
+
+
+[project]
+name = "paradedb-django"
+version = "0.0.1"
+description = "ParadeDB integration for Django"
+readme = "README.md"
+requires-python = ">=3.6"
+authors = [
+    { name = "Rahul Singh"}
+]
+maintainers = [
+    { name = "Rahul Singh"}
+]
+keywords = [
+    "django",
+    "paradedb",
+    "search",
+    "search-engine",
+    "bm25",
+    "full-text-search",
+    "fts",
+    "postgres",
+    "postgresql",
+    "text-indexing",
+    "document-search",
+    "ranking",
+    "relevance",
+    "semantic-search",
+    "bm25-ranking",
+    "elastic-search",
+    "lucene",
+    "tantivy",
+    "pgvector",
+    "orm",
+    "django-models",
+    "query-optimization",
+    "information-retrieval",
+    "search-backend",
+    "search-integration",
+    "database-search",
+    "content-search",
+    "hybrid-search",
+    "bm25-index",
+    "bm25-django",
+    "django-paradedb",
+    "django-extension",
+    "django-search",
+    "django-bm25",
+    "postgres-search",
+    "advanced-search",
+    "fast-search",
+    "pg_search"
+]
+
+classifiers = [
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Database",
+    "Topic :: Database :: Database Engines/Servers",
+    "Framework :: Django",
+    "Framework :: Django :: 3.2",
+    "Framework :: Django :: 4.2",
+    "Framework :: Django :: 5.0",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+
+dependencies = [
+    "django>=3.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "isort",
+]
+docs = [
+    "mkdocs",
+    "mkdocs-material"
+]
+
+[project.urls]
+Documentation = "https://rahulsingh3292.github.io/paradedb-django/"
+Repository = "https://github.com/rahulsingh3292/paradedb-django"
+
+[tool.isort]
+profile = "black"
+lines_after_imports = 2
+multi_line_output = 3
+order_by_type = true
+known_django = "django"
+known_django_third_party = "django_*"
+known_first_party = "paradedb"
+sections = "FUTURE,STDLIB,THIRDPARTY,DJANGO,DJANGO_THIRD_PARTY,FIRSTPARTY,LOCALFOLDER"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "src.example.settings"
+testpaths = ["tests"]
+
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+exclude = '''
+(
+  /(
+      \.eggs
+    | \.git
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+    | node_modules
+  )/
+  | foo.py
+)
+'''
+
+[tool.ruff]
+line-length = 88
+ignore = ["F403", "F405"]

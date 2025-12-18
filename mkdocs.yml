@@ -1,0 +1,58 @@
+site_name: ParadeDB Django
+site_description: ParadeDB integration for Django – Full-text and BM25 search backend
+site_url: https://rahulsingh3292.github.io/paradedb-django/
+repo_url: https://github.com/rahulsingh3292/paradedb-django
+repo_name: ParadeDB Django
+
+theme:
+  name: material
+  logo: assets/logo_fav.jpg
+  features:
+    - navigation.instant
+    - navigation.tabs
+    - content.code.copy
+    - toc.integrate
+
+  palette:
+    # 🌙 Dark mode (default)
+    - scheme: slate
+      primary: blue
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+    # 🌞 Light mode
+    - scheme: default
+      primary: blue
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+  highlightjs: true
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Expressions: expressions.md
+  - Lookups: lookups.md
+  - Aggregations: aggregations.md
+  - Indexes: indexes.md
+  - Tokenizers: tokenizers.md
+  - Extension: extension.md
+  - Utilities: utilities.md
+  - Settings: settings.md
+  - Changelog: changelog.md
+
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: true
+  - footnotes
+  - tables
+  - codehilite:
+      guess_lang: true
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.inlinehilite

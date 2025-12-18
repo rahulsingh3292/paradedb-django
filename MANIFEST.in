@@ -1,0 +1,27 @@
+# -------------------------------------------
+# Include essential top-level project files
+# -------------------------------------------
+include README.md
+include LICENSE
+include pyproject.toml
+
+# -------------------------------------------
+# Include the main source package
+# -------------------------------------------
+recursive-include src/paradedb *.py *.json *.yaml *.ini *.txt
+
+# -------------------------------------------
+# Include documentation files
+# -------------------------------------------
+recursive-include docs *
+
+# -------------------------------------------
+# Exclude unnecessary files and directories
+# -------------------------------------------
+exclude .gitignore
+exclude .DS_Store
+exclude *.pyc
+prune __pycache__
+prune .github
+prune dist
+prune build
