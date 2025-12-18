@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: paradedb/paradedb:latest
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: paradedb
+    ports:
+      - "5435:5432" # Host port 5435 mapped to container 5432
+    volumes:
+      - database_data:/var/lib/postgresql/db_data/
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 1m
+      timeout: 1m
+      retries: 10
+      start_period: 30s
+
+volumes:
+  database_data:
