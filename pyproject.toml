@@ -1,6 +1,10 @@
 [build-system]
-requires = ["setuptools>=70", "wheel"]
+requires = ["setuptools>=61", "setuptools_scm"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+version_scheme = "post-release"
+local_scheme = "node-and-date"
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -10,8 +14,9 @@ namespaces = false
 
 [project]
 name = "paradedb-django"
-version = "0.0.1"
+dynamic = ["version"]
 description = "ParadeDB integration for Django"
+license = { file = "LICENSE" }
 readme = "README.md"
 requires-python = ">=3.6"
 authors = [
