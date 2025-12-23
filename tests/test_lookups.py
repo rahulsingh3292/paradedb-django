@@ -231,3 +231,9 @@ class TestExpressions(TestCase):
             ]
         )
         bool(qs[:1])
+
+    def test_lookup_json_op(self):
+        _1_path = Article.objects.filter(metadata__field1__json_op="django")
+        bool(_1_path[:1])
+        _2_path = Article.objects.filter(metadata__field1__field2__json_op="django")
+        bool(_2_path[:1])

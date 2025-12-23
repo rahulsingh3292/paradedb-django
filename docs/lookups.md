@@ -319,3 +319,15 @@ Article.objects.filter(title__proximity=[["python", "##" 1, "##>",  "django"]])
 ```
 
 ---
+
+## __json_op
+
+**Expression:** [JsonOp](./expressions.md#jsonop)
+
+**Example:**
+
+```python
+Article.objects.filter(metadata__field1__field2__json_op="django")
+```
+
+---

@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   postgres:
-    image: paradedb/paradedb:latest
+    image: paradedb/paradedb:0.20.5
     container_name: postgres
     environment:
       POSTGRES_USER: postgres
