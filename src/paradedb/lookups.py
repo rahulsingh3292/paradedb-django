@@ -23,6 +23,7 @@ from .expressions import (
     Empty,
     Exists,
     FuzzyTerm,
+    JsonOp,
     Match,
     MoreLikeThis,
     Parse,
@@ -72,11 +73,14 @@ __all__ = [
     "PhraseV2Lookup",
     "TermV2Lookup",
     "ProximityLookup",
+    "JsonOpLookup",
 ]
 
 
-def register_lookup_for_all_fields(lookup_cls):
+def register_lookup_for_all_fields(lookup_cls, extra_fields=None):
     for f in [ForeignKey, ManyToManyField, OneToOneField, Field, CharField]:
+        f.register_lookup(lookup_cls)
+    for f in extra_fields or []:
         f.register_lookup(lookup_cls)
     return lookup_cls
 
@@ -461,3 +465,21 @@ class ProximityLookup(ExpressionLookup):
     def post_process_expression(self, expression, field):
         assert field is not None, "field cannot be None"
         expression.pfield = field
+
+
+class JsonOpLookup(models.Lookup):
+    lookup_name = "json_op"
+
+    def as_sql(self, compiler, connection):
+        lhs_sql, lhs_params = compiler.compile(self.lhs)
+        split_by = "#>"
+        if "->" in lhs_sql:
+            split_by = "->"
+        keys = lhs_params[0]
+        if not isinstance(keys, (list, tuple)):
+            keys = [keys]
+        field = lhs_sql.split(split_by)[0].replace("(", "").replace(")", "")
+        return JsonOp(field, *keys, value=self.rhs).as_sql(compiler, connection)
+
+
+register_lookup_for_all_fields(JsonOpLookup, extra_fields=[models.JSONField])

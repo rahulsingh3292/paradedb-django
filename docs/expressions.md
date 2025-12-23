@@ -765,3 +765,20 @@ Article.objects.filter(
         )
     )
 ```
+
+## JsonOp
+* supported in version - 0.20.5
+
+```python
+JsonOp(field: str, *keys: str, value: str | int | models.Value)
+```
+
+Documentation link: -
+
+**Example**
+```python
+from paradedb.expressions import JsonOp
+
+Article.objects.filter(JsonOp("metadata", "read_count", value=models.Value(1)))
+Article.objects.filter(JsonOp("metadata", "tags", "name", value='django'))
+```

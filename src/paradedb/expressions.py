@@ -46,6 +46,7 @@ __all__ = [
     "ParseWithField",
     "ProximityArray",
     "ProximityRegex",
+    "JsonOp",
 ]
 
 
@@ -119,6 +120,17 @@ def _resolve_and_set_key_field(
             key_field_name,
             KeyField(table=table, primary_key_field=primary_key_field),
         )
+
+
+def _resolve_value(value, connection, compiler):
+    if isinstance(value, list):
+        return postgres_array(value)
+    if isinstance(value, models.Value):
+        return connection.ops.compose_sql(*value.as_sql(compiler, connection))
+    if isinstance(value, models.F):
+        model, field, alias = resolve_f_model_and_field(value, compiler.query)
+        return f"{alias}.{field}"
+    return value
 
 
 def _make_schema_sql(func, args, schema="paradedb", lhs=None, op="@@@", key_field=None):
@@ -1593,3 +1605,31 @@ class Proximity(Expression):
 
     def __repr__(self):
         return f"Proximity(values={self.values}, field={self.pfield})"
+
+
+class JsonOp(Expression):
+    def __init__(
+        self, field: str, *keys: str, value: str | int | models.Value, **kwargs
+    ):
+        self.pfield = field
+        self.keys = keys
+        self.value = value
+        super().__init__(
+            output_field=kwargs.pop("output_field", models.BooleanField()),
+            **kwargs,
+        )
+
+    def as_sql(self, compiler, connection):
+        _resolve_and_set_key_field(self.pfield, self, connection, compiler)
+
+        access_key = f"{self.pfield}{self.build_key(self.keys)}"
+        return f"{access_key} @@@ %s", [
+            _resolve_value(self.value, connection, compiler)
+        ]
+
+    @classmethod
+    def build_key(self, keys):
+        native_python_dict_access_ke_string = []
+        for key in keys:
+            native_python_dict_access_ke_string.append("['{}']".format(key))
+        return "".join(native_python_dict_access_ke_string)

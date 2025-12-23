@@ -13,6 +13,7 @@ from paradedb.expressions import (
     DisjunctionMax,
     Exists,
     FuzzyTerm,
+    JsonOp,
     Match,
     MoreLikeThis,
     Parse,
@@ -237,3 +238,14 @@ class TestExpressions(TestCase):
     def test_more_like_this_id(self):
         qs = Article.objects.filter(MoreLikeThis(document={"id": 123}, match_op=True))
         bool(qs[:1])
+
+    def test_json_op(self):
+        _1_path = Article.objects.filter(
+            JsonOp("metadata", "read_count", value=models.Value(1))
+        )
+        bool(_1_path[:1])
+
+        _2_path = Article.objects.filter(
+            JsonOp("metadata", "tags", "name", value="title")
+        )
+        bool(_2_path[:1])
