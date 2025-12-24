@@ -1,0 +1,1808 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="ParadeDB integration for Django – Full-text and BM25 search backend">
+      
+      
+      
+        <link rel="canonical" href="https://rahulsingh3292.github.io/paradedb-django/expressions/">
+      
+      
+        <link rel="prev" href="../getting-started/">
+      
+      
+        <link rel="next" href="../lookups/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Expressions - ParadeDB Django</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-1R3J0MDTJZ"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-1R3J0MDTJZ",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-1R3J0MDTJZ",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#introduction" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="ParadeDB Django" class="md-header__button md-logo" aria-label="ParadeDB Django" data-md-component="logo">
+      
+  <img src="../assets/logo_fav.jpg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ParadeDB Django
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Expressions
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/rahulsingh3292/paradedb-django" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ParadeDB Django
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../getting-started/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Getting Started
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Expressions
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../lookups/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Lookups
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../aggregations/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Aggregations
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../indexes/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Indexes
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../tokenizers/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Tokenizers
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../extension/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Extension
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../utilities/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Utilities
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../settings/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Settings
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../changelog/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Changelog
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="ParadeDB Django" class="md-nav__button md-logo" aria-label="ParadeDB Django" data-md-component="logo">
+      
+  <img src="../assets/logo_fav.jpg" alt="logo">
+
+    </a>
+    ParadeDB Django
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/rahulsingh3292/paradedb-django" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ParadeDB Django
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Expressions
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Expressions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#all" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        All
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#empty" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Empty
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Search
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#match" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Match
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exists
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#range" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Range
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Range">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rangetype" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RangeType
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rangebound" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RangeBound
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rangeterm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RangeTerm
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#regex" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Regex
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#term" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Term
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#termset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TermSet
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzyterm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FuzzyTerm
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phrase" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phrase
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phraseprefix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PhrasePrefix
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#constscore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ConstScore
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bm25score" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bm25Score
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#boost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Boost
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#disjunctionmax" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DisjunctionMax
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#boolean" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Boolean
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#snippet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Snippet
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#morelikethis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MoreLikeThis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parse
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parsewithfield" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ParseWithField
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#proximity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Proximity
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jsonop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JsonOp
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lookups/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lookups
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aggregations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Aggregations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../indexes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Indexes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tokenizers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tokenizers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extension/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extension
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../utilities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Utilities
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h1>
+<p>Expressions in <strong>ParadeDB Django</strong> define how search, filtering, and ranking logic is constructed in Django ORM queries.
+They translate your filters into ParadeDB-compatible queries for full-text or structured search.</p>
+<hr />
+<blockquote>
+<p>⚠ <strong>Note on Parameters</strong></p>
+<ul>
+<li><code>key_field</code> (<code>str | KeyField)</code>, default <code>id</code>. see <a href="../utilities/#keyfield">KeyField</a>):
+  The primary field used as the key for the operation. <br></li>
+</ul>
+<p>when using the <code>KeyField</code> on related table (fk,o2o,m2m), make sure the join is applied using select_related or using reverse related query.</p>
+<ul>
+<li>
+<p><code>match_op</code> (<code>bool</code>, default <code>False</code>):
+   When <code>True</code>, the expression <code>&lt;key_field_or_lhs&gt; @@@ actual_function()</code> will be applied.
+   When <code>False</code> (or not provided), only the function will be used to generate the SQL, and no key field match operation is applied.</p>
+</li>
+<li>
+<p>when <code>expression.field</code> is a <code>models.F</code> or <code>TableField</code> then, in this case <code>key_field</code> paramter is not required it will be automatically resolved and will set to the corresponding table model(table).
+ make sure the join is applied when using a foreign field <code>ex(models.F(user__id))</code>.</p>
+</li>
+<li>
+<p><code>output_field</code> can be passed in the expression in case of custom field type. by default no need to pass output field.</p>
+</li>
+<li><code>legacy: bool</code>  when <code>True</code> then <code>paradedb</code> schema functions will be used instead <code>pdb</code>. no need to pass unless you want to use legacy function. see legacy <a href="../settings/#paradedb_use_legacy">settings</a></li>
+</ul>
+</blockquote>
+<hr />
+<blockquote>
+<ul>
+<li>All the Expressions is inside the <code>paradedb.expressions</code> module</li>
+</ul>
+</blockquote>
+<hr />
+<h2 id="all">All<a class="headerlink" href="#all" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">All</span><span class="p">(</span> <span class="n">key_field</span><span class="p">:</span> <span class="n">KeyField</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">models</span><span class="o">.</span><span class="n">F</span> <span class="o">|</span> <span class="n">TableField</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">match_op</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+<p>To learn more, see the <a href="https://docs.paradedb.com/legacy/advanced/compound/all">ParadeDB All</a></p>
+<hr />
+<h2 id="empty">Empty<a class="headerlink" href="#empty" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">Empty</span><span class="p">(</span><span class="n">key_field</span><span class="p">:</span> <span class="n">KeyField</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">models</span><span class="o">.</span><span class="n">F</span> <span class="o">|</span> <span class="n">TableField</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">match_op</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+<p>To learn more, see the <a href="https://docs.paradedb.com/legacy/advanced/compound/empty">ParadeDB Empty</a>.</p>
+<p><strong>Example</strong></p>
+<hr />
+<h2 id="search">Search<a class="headerlink" href="#search" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">Search</span><span class="p">(</span>
+    <span class="n">field</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">models</span><span class="o">.</span><span class="n">F</span> <span class="o">|</span> <span class="n">TableField</span><span class="p">,</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">ValueCast</span><span class="o">|</span> <span class="n">ParadeDbFunctionExpression</span><span class="p">,</span>
+    <span class="n">escaped</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">op</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;@@@&quot;</span><span class="p">,</span> <span class="s2">&quot;|||&quot;</span><span class="p">,</span> <span class="s2">&quot;===&quot;</span><span class="p">,</span> <span class="s2">&quot;###&quot;</span><span class="p">,</span> <span class="s2">&quot;&amp;&amp;&amp;&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;@@@&quot;</span>
+<span class="p">)</span>
+</code></pre></div>
+<blockquote>
+<ul>
+<li>See <a href="../utilities/#tablefield">TableField</a> <br></li>
+<li><code>@@@</code> is default normal paradedb operator and evaluates complex query expressions like proximity searches, regex patterns, and parsed queries</li>
+<li><code>|||</code> performs disjunctive matching, finding documents that contain any of the query term.</li>
+<li><code>###</code> enforces both term presence and positional requirements, perfect for phrase matching</li>
+<li><code>&amp;&amp;&amp;</code> requires all terms to be present (conjunction)</li>
+<li><code>===</code> performs exact token matching, ideal for categorical fields or identifier lookups</li>
+<li><code>|||, ===, &amp;&amp;&amp;, ###, paradedb.cast.ValueCast</code> only supoorted in paradedb v2 api.</li>
+</ul>
+</blockquote>
+<p>To learn more, see the <a href="https://docs.paradedb.com/legacy/full-text/overview">ParadeDB Search Overview</a>.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Search</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;well&quot;</span><span class="p">,</span> <span class="n">escaped</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+
+ <span class="c1"># using F.. when using on related field make sure join is applied using select_related</span>
+ <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Search</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">F</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">),</span> <span class="s2">&quot;python&quot;</span><span class="p">))</span>
+
+ <span class="c1"># using table field</span>
+ <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Search</span><span class="p">(</span><span class="n">TableField</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="n">key_field</span><span class="o">=</span><span class="n">KeyField</span><span class="p">(</span><span class="n">Article</span><span class="p">)),</span> <span class="s2">&quot;python&quot;</span><span class="p">))</span>
+
+ <span class="c1"># using search value with tokenizer. -- supported in v2 only</span>
+ <span class="kn">from</span><span class="w"> </span><span class="nn">paradedb.cast</span><span class="w"> </span><span class="kn">import</span> <span class="n">ValueCast</span>
+ <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Search</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="n">ValueCast</span><span class="p">(</span><span class="s1">&#39;django&#39;</span><span class="p">,</span> <span class="s1">&#39;pdb.ngram(1,2)&#39;</span><span class="p">)))</span>
+</code></pre></div></p>
+<hr />
+<h2 id="match">Match<a class="headerlink" href="#match" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">Match</span><span class="p">(</span>
+    <span class="n">field</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">models</span><span class="o">.</span><span class="n">F</span> <span class="o">|</span> <span class="n">TableField</span><span class="p">,</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">distance</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">conjunction_mode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">tokenizer</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span>
+            <span class="n">Tokenizer</span> <span class="o">|</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span>
+                <span class="n">typing</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span>
+                    <span class="s2">&quot;whitespace&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;keyword&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;ngram&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;regex&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;icu&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;jieba&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;chinese_lindera&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;chinese_compatible&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;source_code&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;raw&quot;</span><span class="p">,</span>
+                <span class="p">]</span>
+            <span class="p">]</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">transposition_cost_one</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">prefix</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">escaped</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">key_field</span><span class="p">:</span> <span class="n">KeyField</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
+    <span class="n">match_op</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span>
+</code></pre></div>
+<blockquote>
+<p><code>tokenizer</code>: currently string tokenizers are supported. Tokenizer instance implementation will be available soon. <br></p>
+</blockquote>
+<p>To learn more, see the <a href="https://docs.paradedb.com/legacy/advanced/full-text/match">ParadeDB Match</a>.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">Match</span><span class="p">(</span>
+            <span class="n">field</span><span class="o">=</span><span class="s2">&quot;title&quot;</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="s2">&quot;python&quot;</span><span class="p">,</span>
+            <span class="n">distance</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">conjunction_mode</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">prefix</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">tokenizer</span><span class="o">=</span><span class="s2">&quot;whitespace&quot;</span><span class="p">,</span>
+            <span class="n">match_op</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h2 id="exists">Exists<a class="headerlink" href="#exists" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">Exists</span><span class="p">(</span><span class="n">field</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">models</span><span class="o">.</span><span class="n">F</span> <span class="o">|</span> <span class="n">TableField</span><span class="p">,</span> <span class="n">key_field</span><span class="p">:</span> <span class="n">KeyField</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">match_op</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+<p>To learn more, see the <a href="https://docs.paradedb.com/legacy/advanced/term/exists">ParadeDB Exists</a>.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Exists</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="s2">&quot;rank&quot;</span><span class="p">,</span> <span class="n">match_op</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</code></pre></div></p>
+<hr />
+<h2 id="range">Range<a class="headerlink" href="#range" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">Range</span><span class="p">(</span>
+    <span class="n">field</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">models</span><span class="o">.</span><span class="n">F</span> <span class="o">|</span> <span class="n">TableField</span><span class="p">,</span>
+    <span class="n">range_type</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;int4range&quot;</span><span class="p">,</span> <span class="s2">&quot;int8range&quot;</span><span class="p">,</span> <span class="s2">&quot;daterange&quot;</span><span class="p">,</span> <span class="s2">&quot;tsrange&quot;</span><span class="p">,</span> <span class="s2">&quot;tstzrange&quot;</span><span class="p">],</span>
+    <span class="n">start</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span> <span class="o">|</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span>
+    <span class="n">end</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span> <span class="o">|</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">bounds</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;[)&quot;</span><span class="p">,</span> <span class="s2">&quot;(]&quot;</span><span class="p">,</span> <span class="s2">&quot;[]&quot;</span><span class="p">,</span> <span class="s2">&quot;()&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Range</span><span class="o">.</span><span class="n">RangeBound</span><span class="o">.</span><span class="n">INCLUSIVE_LOWER_EXCLUSIVE_UPPER</span><span class="p">,</span>
+    <span class="n">key_field</span><span class="p">:</span> <span class="n">KeyField</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
+    <span class="n">match_op</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<h3 id="rangetype">RangeType<a class="headerlink" href="#rangetype" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">RangeType</span><span class="o">.</span><span class="n">INT4RANGE</span>  <span class="c1"># &quot;int4range&quot;</span>
+<span class="n">RangeType</span><span class="o">.</span><span class="n">INT8RANGE</span>  <span class="c1"># &quot;int8range&quot;</span>
+<span class="n">RangeType</span><span class="o">.</span><span class="n">DATERANGE</span>  <span class="c1"># &quot;daterange&quot;</span>
+<span class="n">RangeType</span><span class="o">.</span><span class="n">TSRANGE</span>    <span class="c1"># &quot;tsrange&quot;</span>
+<span class="n">RangeType</span><span class="o">.</span><span class="n">TSTZRANGE</span>  <span class="c1"># &quot;tstzrange&quot;</span>
+</code></pre></div>
+<h3 id="rangebound">RangeBound<a class="headerlink" href="#rangebound" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">RangeBound</span><span class="o">.</span><span class="n">INCLUSIVE_LOWER_EXCLUSIVE_UPPER</span>  <span class="c1"># &quot;[)&quot;</span>
+<span class="n">RangeBound</span><span class="o">.</span><span class="n">EXCLUSIVE_LOWER_INCLUSIVE_UPPER</span>  <span class="c1"># &quot;(]&quot;</span>
+<span class="n">RangeBound</span><span class="o">.</span><span class="n">INCLUSIVE_BOTH</span>                    <span class="c1"># &quot;[]&quot;</span>
+<span class="n">RangeBound</span><span class="o">.</span><span class="n">EXCLUSIVE_BOTH</span>                    <span class="c1"># &quot;()&quot;</span>
+</code></pre></div>
+<p>To learn more, see the <a href="https://docs.paradedb.com/legacy/advanced/term/range">ParadeDB Range</a>.</p>
+<p><strong>Example</strong></p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Range Date</span>
+
+<span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">Range</span><span class="p">(</span>
+            <span class="n">field</span><span class="o">=</span><span class="s2">&quot;created&quot;</span><span class="p">,</span>
+            <span class="n">range_type</span><span class="o">=</span><span class="s2">&quot;daterange&quot;</span><span class="p">,</span>
+            <span class="n">start</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2025</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+            <span class="n">end</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2025</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+            <span class="n">bounds</span><span class="o">=</span><span class="s2">&quot;[)&quot;</span><span class="p">,</span>
+            <span class="n">match_op</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="c1"># Range Integer</span>
+
+<span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">Range</span><span class="p">(</span>
+            <span class="n">field</span><span class="o">=</span><span class="s2">&quot;rank&quot;</span><span class="p">,</span>
+            <span class="n">range_type</span><span class="o">=</span><span class="s2">&quot;int4range&quot;</span><span class="p">,</span>  <span class="c1"># Range.RangeType.INT4RANGE</span>
+            <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">end</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+            <span class="n">bounds</span><span class="o">=</span><span class="s2">&quot;()&quot;</span><span class="p">,</span>
+            <span class="n">match_op</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+<span class="c1"># Unbounded Range</span>
+
+<span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">Range</span><span class="p">(</span>
+            <span class="n">field</span><span class="o">=</span><span class="s2">&quot;rank&quot;</span><span class="p">,</span>
+            <span class="n">range_type</span><span class="o">=</span><span class="s2">&quot;int4range&quot;</span><span class="p">,</span>  <span class="c1"># Range.RangeType.INT4RANGE</span>
+            <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">match_op</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="rangeterm">RangeTerm<a class="headerlink" href="#rangeterm" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">RangeTerm</span><span class="p">(</span>
+    <span class="n">field</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">models</span><span class="o">.</span><span class="n">F</span> <span class="o">|</span> <span class="n">TableField</span><span class="p">,</span>
+    <span class="n">term_or_range</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">cast</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span>
+            <span class="s2">&quot;tsrange&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;int4range&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;int8range&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;daterange&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;tstzrange&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;bigint&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;date&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;double precision&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;numeric&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;real&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;smallint&quot;</span><span class="p">,</span>
+            <span class="s1">&#39;&quot;char&quot;&#39;</span><span class="p">,</span>
+            <span class="s2">&quot;timestamp with time zone&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;timestamp without time zone&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;numrange&quot;</span><span class="p">,</span>
+        <span class="p">],</span>
+    <span class="n">relation</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Intersects&quot;</span><span class="p">,</span> <span class="s2">&quot;Within&quot;</span><span class="p">,</span> <span class="s2">&quot;Contains&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">key_field</span><span class="p">:</span> <span class="n">KeyField</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
+    <span class="n">match_op</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>To learn more, see the <a href="https://docs.paradedb.com/legacy/advanced/term/range-term">ParadeDB RangeTerm</a>.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><span class="c1"># Range Term With Date Range Fields</span>
+<span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">RangeTerm</span><span class="p">(</span>
+            <span class="n">field</span><span class="o">=</span><span class="s2">&quot;date_range&quot;</span><span class="p">,</span>
+            <span class="n">term_or_range</span><span class="o">=</span><span class="s2">&quot;&#39;[2025-09-02,2025-09-10]&#39;&quot;</span><span class="p">,</span>
+            <span class="n">cast</span><span class="o">=</span><span class="n">Range</span><span class="o">.</span><span class="n">RangeType</span><span class="o">.</span><span class="n">DATERANGE</span><span class="p">,</span>
+            <span class="n">relation</span><span class="o">=</span><span class="n">RangeTerm</span><span class="o">.</span><span class="n">Relation</span><span class="o">.</span><span class="n">Intersects</span><span class="p">,</span>
+            <span class="n">match_op</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="c1"># Range with Integer Range Fields</span>
+ <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">RangeTerm</span><span class="p">(</span>
+            <span class="n">field</span><span class="o">=</span><span class="s2">&quot;price_range&quot;</span><span class="p">,</span>
+            <span class="n">term_or_range</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">cast</span><span class="o">=</span><span class="n">RangeTerm</span><span class="o">.</span><span class="n">Cast</span><span class="o">.</span><span class="n">integer</span><span class="p">,</span>
+            <span class="n">match_op</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h2 id="regex">Regex<a class="headerlink" href="#regex" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">Regex</span><span class="p">(</span>
+    <span class="n">field</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">models</span><span class="o">.</span><span class="n">F</span> <span class="o">|</span> <span class="n">TableField</span><span class="p">,</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">key_field</span><span class="p">:</span> <span class="n">KeyField</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
+    <span class="n">match_op</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>To learn more, see the <a href="https://docs.paradedb.com/legacy/advanced/term/regex">ParadeDB Regex</a>.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">Regex</span><span class="p">(</span>
+            <span class="n">field</span><span class="o">=</span><span class="s2">&quot;title&quot;</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="s1">&#39;^well$&#39;</span><span class="p">,</span>
+            <span class="n">match_op</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h2 id="term">Term<a class="headerlink" href="#term" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">Term</span><span class="p">(</span>
+    <span class="n">field</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">models</span><span class="o">.</span><span class="n">F</span> <span class="o">|</span> <span class="n">TableField</span><span class="p">,</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">enum_cast_field</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="c1"># PostgreSQL cast type, e.g., &#39;int&#39;, &#39;date&#39;, &#39;timestamp&#39;</span>
+    <span class="n">key_field</span><span class="p">:</span> <span class="n">KeyField</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
+    <span class="n">match_op</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>To learn more, see the <a href="https://docs.paradedb.com/legacy/advanced/term/term">ParadeDB Term</a>.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Term</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="s2">&quot;rank&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">match_op</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</code></pre></div></p>
+<hr />
+<h2 id="termset">TermSet<a class="headerlink" href="#termset" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">TermSet</span><span class="p">(</span>
+    <span class="n">terms</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">Term</span><span class="p">],</span>
+    <span class="n">key_field</span><span class="p">:</span> <span class="n">KeyField</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
+    <span class="n">match_op</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>To learn more, see the <a href="https://docs.paradedb.com/legacy/advanced/term/term-set">ParadeDB TermSet</a>.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">TermSet</span><span class="p">(</span>
+            <span class="n">terms</span><span class="o">=</span><span class="p">[</span>
+                <span class="n">Term</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="s2">&quot;rank&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+                <span class="n">Term</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="s2">&quot;rank&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">200</span><span class="p">),</span>
+            <span class="p">],</span>
+            <span class="n">match_op</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h2 id="fuzzyterm">FuzzyTerm<a class="headerlink" href="#fuzzyterm" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">FuzzyTerm</span><span class="p">(</span>
+    <span class="n">field</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">models</span><span class="o">.</span><span class="n">F</span> <span class="o">|</span> <span class="n">TableField</span><span class="p">,</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">distance</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="n">transposition_cost_one</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">prefix</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">key_field</span><span class="p">:</span> <span class="n">KeyField</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
+    <span class="n">match_op</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>To learn more, see the <a href="https://docs.paradedb.com/legacy/advanced/term/fuzzy-term">ParadeDB FuzzyTerm</a>.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="n">FuzzyTerm</span><span class="p">(</span>
+                <span class="n">field</span><span class="o">=</span><span class="s2">&quot;title&quot;</span><span class="p">,</span>
+                <span class="n">value</span><span class="o">=</span><span class="s2">&quot;well&quot;</span><span class="p">,</span>
+                <span class="n">distance</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                <span class="n">prefix</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">transposition_cost_one</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">match_op</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h2 id="phrase">Phrase<a class="headerlink" href="#phrase" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">Phrase</span><span class="p">(</span>
+    <span class="n">field</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">models</span><span class="o">.</span><span class="n">F</span> <span class="o">|</span> <span class="n">TableField</span><span class="p">,</span>
+    <span class="n">pharses</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="c1"># must be atleast 2,</span>
+    <span class="n">slop</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">key_field</span><span class="p">:</span> <span class="n">KeyField</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
+    <span class="n">match_op</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>To learn more, see the <a href="https://docs.paradedb.com/legacy/advanced/phrase/phrase">ParadeDB Phrase</a>.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">Phrase</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="n">pharses</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;quick&quot;</span><span class="p">,</span> <span class="s2">&quot;brown&quot;</span><span class="p">,</span> <span class="s2">&quot;fox&quot;</span><span class="p">],</span> <span class="n">slop</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">match_op</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h2 id="phraseprefix">PhrasePrefix<a class="headerlink" href="#phraseprefix" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">PhrasePrefix</span><span class="p">(</span>
+    <span class="n">field</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">models</span><span class="o">.</span><span class="n">F</span> <span class="o">|</span> <span class="n">TableField</span><span class="p">,</span>
+    <span class="n">pharses</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="c1"># must be atleast 2,</span>
+    <span class="n">max_expansion</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">key_field</span><span class="p">:</span> <span class="n">KeyField</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
+    <span class="n">match_op</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>To learn more, see the <a href="https://docs.paradedb.com/legacy/advanced/phrase/phrase-prefix">ParadeDB PhrasePrefix</a>.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">PhrasePrefix</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="n">pharses</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;deep&quot;</span><span class="p">,</span> <span class="s2">&quot;learn&quot;</span><span class="p">],</span> <span class="n">max_expansion</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">match_op</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h2 id="constscore">ConstScore<a class="headerlink" href="#constscore" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">ConstScore</span><span class="p">(</span>
+    <span class="n">score</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">query</span><span class="p">:</span> <span class="n">ParadeDbFunctionExpression</span><span class="p">,</span>
+    <span class="n">key_field</span><span class="p">:</span> <span class="n">KeyField</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
+    <span class="n">match_op</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>To learn more, see the <a href="https://docs.paradedb.com/legacy/advanced/compound/const">ParadeDB ConstScore</a>.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code>  <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">Boolean</span><span class="p">(</span>
+            <span class="n">should</span><span class="o">=</span><span class="p">[</span><span class="n">Term</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;running&quot;</span><span class="p">),</span> <span class="n">ConstScore</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">Match</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;shoes&quot;</span><span class="p">))],</span>
+            <span class="n">match_op</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h2 id="bm25score">Bm25Score<a class="headerlink" href="#bm25score" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">Bm25Score</span><span class="p">(</span><span class="n">key_field</span><span class="p">:</span> <span class="n">KeyField</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">models</span><span class="o">.</span><span class="n">F</span> <span class="o">|</span> <span class="n">TableField</span>  <span class="o">=</span> <span class="s2">&quot;id&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>To learn more, see the <a href="https://docs.paradedb.com/legacy/full-text/scoring">ParadeDB BM25 Scoring</a>.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">score</span><span class="o">=</span><span class="n">Bm25Score</span><span class="p">())</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">score__gt</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;-score&quot;</span><span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h2 id="boost">Boost<a class="headerlink" href="#boost" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">Boost</span><span class="p">(</span>
+    <span class="n">factor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">query</span><span class="p">:</span> <span class="n">ParadeDbFunctionExpression</span><span class="p">,</span>
+    <span class="n">key_field</span><span class="p">:</span> <span class="n">KeyField</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
+    <span class="n">match_op</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>To learn more, see the <a href="https://docs.paradedb.com/legacy/advanced/compound/boost">ParadeDB Boost</a>.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">Boolean</span><span class="p">(</span>
+            <span class="n">should</span><span class="o">=</span><span class="p">[</span><span class="n">Term</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;running&quot;</span><span class="p">),</span> <span class="n">Boost</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">Match</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;shoes&quot;</span><span class="p">))],</span>
+            <span class="n">match_op</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h2 id="disjunctionmax">DisjunctionMax<a class="headerlink" href="#disjunctionmax" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">DisjunctionMax</span><span class="p">(</span>
+    <span class="n">disjuncts</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">ParadeDbFunctionExpression</span><span class="p">],</span>
+    <span class="n">tie_breaker</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">key_field</span><span class="p">:</span> <span class="n">KeyField</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
+    <span class="n">match_op</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>To learn more, see the <a href="https://docs.paradedb.com/legacy/advanced/compound/disjunction-max">ParadeDB DisjunctionMax</a>.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">DisjunctionMax</span><span class="p">(</span>
+            <span class="n">disjuncts</span><span class="o">=</span><span class="p">[</span><span class="n">Term</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;running&quot;</span><span class="p">),</span> <span class="n">Term</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;shoes&quot;</span><span class="p">)],</span>
+            <span class="n">tie_breaker</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">match_op</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h2 id="boolean">Boolean<a class="headerlink" href="#boolean" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">Boolean</span><span class="p">(</span>
+    <span class="n">must</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">ParadeDbFunctionExpression</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">must_not</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">ParadeDbFunctionExpression</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">should</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">ParadeDbFunctionExpression</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">key_field</span><span class="p">:</span> <span class="n">KeyField</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
+    <span class="n">match_op</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>To learn more, see the <a href="https://docs.paradedb.com/legacy/advanced/compound/boolean">ParadeDB Boolean</a>.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">Boolean</span><span class="p">(</span>
+            <span class="n">must</span><span class="o">=</span><span class="p">[</span><span class="n">Match</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;python&quot;</span><span class="p">)],</span>
+            <span class="n">must_not</span><span class="o">=</span><span class="p">[</span><span class="n">Match</span><span class="p">(</span><span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;python&quot;</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="s2">&quot;raw&quot;</span><span class="p">)],</span>
+            <span class="n">should</span><span class="o">=</span><span class="p">[</span><span class="n">Term</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;python&quot;</span><span class="p">),</span> <span class="n">ConstScore</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">Term</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;python&quot;</span><span class="p">))],</span>
+            <span class="n">match_op</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h2 id="snippet">Snippet<a class="headerlink" href="#snippet" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">Snippet</span><span class="p">(</span>
+    <span class="n">field</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">models</span><span class="o">.</span><span class="n">F</span> <span class="o">|</span> <span class="n">TableField</span><span class="p">,</span>
+    <span class="n">limit</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">offset</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">start_tag</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">end_tag</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_num_chars</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>To learn more, see the <a href="https://docs.paradedb.com/legacy/full-text/highlighting">ParadeDB Snippet and Highlighting</a>.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+        <span class="n">snippet_title</span><span class="o">=</span><span class="n">Snippet</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="n">start_tag</span><span class="o">=</span><span class="s2">&quot;&lt;b&gt;&quot;</span><span class="p">,</span> <span class="n">end_tag</span><span class="o">=</span><span class="s2">&quot;&lt;/b&gt;&quot;</span><span class="p">,</span> <span class="n">max_num_chars</span><span class="o">=</span><span class="mi">100</span><span class="p">),</span>
+        <span class="n">snippet_description</span><span class="o">=</span><span class="n">Snippet</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="n">start_tag</span><span class="o">=</span><span class="s2">&quot;&lt;b&gt;&quot;</span><span class="p">,</span> <span class="n">end_tag</span><span class="o">=</span><span class="s2">&quot;&lt;/b&gt;&quot;</span><span class="p">,</span> <span class="n">max_num_chars</span><span class="o">=</span><span class="mi">100</span><span class="p">),</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">Boolean</span><span class="p">(</span><span class="n">must</span><span class="o">=</span><span class="p">[</span><span class="n">Match</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;hello&quot;</span><span class="p">)],</span> <span class="n">match_op</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="o">|</span> <span class="n">Match</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;well&quot;</span><span class="p">,</span> <span class="n">match_op</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h2 id="morelikethis">MoreLikeThis<a class="headerlink" href="#morelikethis" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">MoreLikeThis</span><span class="p">(</span>
+    <span class="n">document_id</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">document</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">fields</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">min_doc_frequency</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_doc_frequency</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">min_term_frequency</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_query_terms</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">min_word_length</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_word_length</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">boost_factor</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">stop_words</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">key_field</span><span class="p">:</span> <span class="n">KeyField</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
+    <span class="n">match_op</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<blockquote>
+<p>⚠ <strong>Note:</strong>
+- <code>document_id</code> and <code>document</code> <strong>cannot be used together</strong>.
+  When <code>document</code> is provided, the <code>document_id</code> field will be excluded, and vice versa.
+- <code>document_id</code> and <code>fields</code> <strong>can be used together</strong>, while <code>document</code> must be used alone.</p>
+</blockquote>
+<p>To learn more, see the <a href="https://docs.paradedb.com/legacy/advanced/specialized/more-like-this">ParadeDB MoreLikeThis</a>.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><span class="c1"># with document id and field</span>
+<span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">MoreLikeThis</span><span class="p">(</span>
+            <span class="n">document_id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">],</span>
+            <span class="n">min_term_frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">max_query_terms</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+            <span class="n">match_op</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+<span class="c1"># with document field</span>
+<span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">MoreLikeThis</span><span class="p">(</span>
+            <span class="n">document</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;well&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;world&quot;</span><span class="p">},</span>
+            <span class="n">min_term_frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">max_query_terms</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+            <span class="n">match_op</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h2 id="parse">Parse<a class="headerlink" href="#parse" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">Parse</span><span class="p">(</span>
+    <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">lenient</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">conjunction_mode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">key_field</span><span class="p">:</span> <span class="n">KeyField</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
+    <span class="n">match_op</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>To learn more, see the <a href="https://docs.paradedb.com/">ParadeDB Parse</a>.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">Parse</span><span class="p">(</span>
+            <span class="n">query</span><span class="o">=</span><span class="s2">&quot;title:well AND description:well&quot;</span><span class="p">,</span>
+            <span class="n">lenient</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">conjunction_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">key_field</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span>
+            <span class="n">match_op</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h2 id="parsewithfield">ParseWithField<a class="headerlink" href="#parsewithfield" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">ParseWithField</span><span class="p">(</span>
+    <span class="n">field</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">models</span><span class="o">.</span><span class="n">F</span> <span class="o">|</span> <span class="n">TableField</span><span class="p">,</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">lenient</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">conjunction_mode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">key_field</span><span class="p">:</span> <span class="n">KeyField</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
+    <span class="n">match_op</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>To learn more, see the <a href="https://docs.paradedb.com/">ParadeDB ParseWithField</a>.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">ParseWithField</span><span class="p">(</span>
+            <span class="n">field</span><span class="o">=</span><span class="s2">&quot;title&quot;</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="s2">&quot;well&quot;</span><span class="p">,</span>
+            <span class="n">lenient</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">conjunction_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">match_op</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="o">&amp;</span> <span class="n">ParseWithField</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;hello&quot;</span><span class="p">,</span> <span class="n">conjunction_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">match_op</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h2 id="proximity">Proximity<a class="headerlink" href="#proximity" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">Proximity</span><span class="p">(</span>
+        <span class="n">values</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">ProximityRegex</span> <span class="o">|</span> <span class="n">ProximityArray</span> <span class="o">|</span> <span class="n">typing</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;##&quot;</span><span class="p">,</span> <span class="s2">&quot;##&gt;&quot;</span><span class="p">]],</span>
+        <span class="n">field</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="n">models</span><span class="o">.</span><span class="n">F</span> <span class="o">|</span> <span class="n">TableField</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<blockquote>
+<ul>
+<li><code>values</code> expected length must be &gt;= 3. passing wrong sequence value will raise <code>ValueError</code>.</li>
+</ul>
+</blockquote>
+<p>To learn more, see the <a href="https://docs.paradedb.com/documentation/full-text/proximity">ParadeDB Proximity</a>.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">paradedb.expressions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Proximity</span><span class="p">,</span> <span class="n">ProximityRegex</span><span class="p">,</span> <span class="n">ProximityArray</span>
+
+<span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">Proximity</span><span class="p">(</span>
+            <span class="p">[</span><span class="s2">&quot;python&quot;</span><span class="p">,</span> <span class="s2">&quot;##&quot;</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;##&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;django&quot;</span><span class="p">],</span>
+            <span class="n">field</span><span class="o">=</span><span class="s2">&quot;title&quot;</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+<span class="c1"># using proximity regex and proximity array</span>
+<span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">Proximity</span><span class="p">(</span>
+             <span class="p">(</span>
+                <span class="s2">&quot;django&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;##&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;##&gt;&quot;</span><span class="p">,</span>
+                <span class="n">ProximityRegex</span><span class="p">(</span><span class="s2">&quot;m.*&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;##&quot;</span><span class="p">,</span>
+                <span class="mi">100</span><span class="p">,</span>
+                <span class="s2">&quot;##&gt;&quot;</span><span class="p">,</span>
+                <span class="n">ProximityArray</span><span class="p">([</span><span class="s2">&quot;wow&quot;</span><span class="p">,</span> <span class="n">ProximityRegex</span><span class="p">(</span><span class="s2">&quot;wow.*&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">)]),</span>
+            <span class="p">),</span>
+            <span class="n">field</span><span class="o">=</span><span class="s1">&#39;title&#39;</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+</code></pre></div></p>
+<h2 id="jsonop">JsonOp<a class="headerlink" href="#jsonop" title="Permanent link">&para;</a></h2>
+<ul>
+<li>supported in version - 0.20.5</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">JsonOp</span><span class="p">(</span><span class="n">field</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">keys</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">models</span><span class="o">.</span><span class="n">Value</span><span class="p">)</span>
+</code></pre></div>
+<p>Documentation link: -</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">paradedb.expressions</span><span class="w"> </span><span class="kn">import</span> <span class="n">JsonOp</span>
+
+<span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">JsonOp</span><span class="p">(</span><span class="s2">&quot;metadata&quot;</span><span class="p">,</span> <span class="s2">&quot;read_count&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">Value</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>
+<span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">JsonOp</span><span class="p">(</span><span class="s2">&quot;metadata&quot;</span><span class="p">,</span> <span class="s2">&quot;tags&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;django&#39;</span><span class="p">))</span>
+</code></pre></div></p>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tabs", "content.code.copy", "toc.integrate"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
