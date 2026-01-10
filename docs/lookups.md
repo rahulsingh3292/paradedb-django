@@ -1,4 +1,4 @@
-# Introduction
+# Lookups
 
 Django ParadeDB provides custom lookups that forward their RHS (right-hand-side) values into ParadeDB Expressions.
 You can pass RHS values in **four ways**:  (`tuple`, `list` , `dict`, `LookupParameter`).
@@ -328,6 +328,9 @@ Article.objects.filter(title__proximity=[["python", "##" 1, "##>",  "django"]])
 
 ```python
 Article.objects.filter(metadata__field1__field2__json_op="django")
+
+# using paradedb custom operator
+Article.objects.filter(metadata__field1__term__json_op="django")
 ```
 
 ---
