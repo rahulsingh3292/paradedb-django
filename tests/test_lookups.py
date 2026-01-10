@@ -237,3 +237,15 @@ class TestExpressions(TestCase):
         bool(_1_path[:1])
         _2_path = Article.objects.filter(metadata__field1__field2__json_op="django")
         bool(_2_path[:1])
+
+    def test_lookup_json_op_with_custom_operator(self):
+        match = Article.objects.filter(metadata__field1__match__json_op="django")
+        bool(match[:1])
+        phrase = Article.objects.filter(metadata__field1__phrase__json_op="django")
+        bool(phrase[:1])
+        term = Article.objects.filter(metadata__field1__term__json_op="django")
+        bool(term[:1])
+        conjunction = Article.objects.filter(
+            metadata__field1__f2__match_conjunction__json_op="django"
+        )
+        bool(conjunction[:1])
