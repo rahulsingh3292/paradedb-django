@@ -7,7 +7,7 @@ class StemmerLanguage:
     (
         "Available stemmers are Arabic, Danish, Dutch, English, Finnish, French, "
         "German, Greek, Hungarian, Italian, Norwegian, Portuguese, Romanian, "
-        "Russian, Spanish, Swedish, Tamil, and Turkish."
+        "Russian, Spanish, Swedish, Tamil, Polish and Turkish."
     )
 
     ARABIC = "Arabic"
@@ -28,6 +28,7 @@ class StemmerLanguage:
     SWEDISH = "Swedish"
     TAMIL = "Tamil"
     TURKISH = "Turkish"
+    POLISH = "Polish"
 
     ALL = [
         ARABIC,
@@ -48,13 +49,14 @@ class StemmerLanguage:
         SWEDISH,
         TAMIL,
         TURKISH,
+        POLISH,
     ]
 
 
 class StopWordLanguage:
     (
         "Available stopword languages are Danish, Dutch, English, Finnish, French, "
-        "German, Hungarian, Italian, Norwegian, Portuguese, Russian, Spanish, "
+        "German, Hungarian, Italian, Norwegian, Portuguese, Russian, Spanish, Polish, "
         "and Swedish."
     )
 
@@ -71,6 +73,7 @@ class StopWordLanguage:
     RUSSIAN = "Russian"
     SPANISH = "Spanish"
     SWEDISH = "Swedish"
+    POLISH = "Polish"
 
     ALL = [
         DANISH,
@@ -86,6 +89,7 @@ class StopWordLanguage:
         RUSSIAN,
         SPANISH,
         SWEDISH,
+        POLISH,
     ]
 
 

@@ -16,11 +16,12 @@ from paradedb.utils import (
     TableField,
     escape_query,
     postgres_array,
-    resolve_f_model_and_field,
+    resolve_expression_field,
 )
 
 
 __all__ = [
+    "ParadeOp",
     "All",
     "Empty",
     "Proximity",
@@ -53,6 +54,20 @@ __all__ = [
 ParadeDbFunctionExpression: typing.TypeAlias = Expression
 
 
+class ParadeOp:
+    phrase = "###"
+    match = "|||"
+    match_conjunction = "&&&"
+    term = "==="
+
+    op_dict = {
+        "phrase": phrase,
+        "match": match,
+        "match_conjunction": match_conjunction,
+        "term": term,
+    }
+
+
 def _get_schema(legacy=False, func=None):
     if legacy:
         return "paradedb"
@@ -80,8 +95,8 @@ def _resolve_field_name(
 ):
     if isinstance(field, TableField):
         return field.get_sql()
-    if isinstance(field, models.F):
-        model, field, alias = resolve_f_model_and_field(field, compiler.query)
+    if isinstance(field, (models.F, models.OuterRef)):
+        model, field, alias = resolve_expression_field(field, compiler.query)
         return f"{alias}.{field}"
     else:
         return field if not key_field else f"{key_field.get_table()}.{field}"
@@ -95,8 +110,8 @@ def _resolve_and_set_key_field(
     field_name="pfield",
     key_field_name="key_field",
 ):
-    if isinstance(pfield, models.F):
-        model, field, alias = resolve_f_model_and_field(pfield, compiler.query)
+    if isinstance(pfield, (models.F, models.OuterRef)):
+        model, field, alias = resolve_expression_field(pfield, compiler.query)
         if field_name is not None:
             setattr(instance, field_name, field)
         setattr(
@@ -127,8 +142,8 @@ def _resolve_value(value, connection, compiler):
         return postgres_array(value)
     if isinstance(value, models.Value):
         return connection.ops.compose_sql(*value.as_sql(compiler, connection))
-    if isinstance(value, models.F):
-        model, field, alias = resolve_f_model_and_field(value, compiler.query)
+    if isinstance(value, (models.F, models.OuterRef)):
+        model, field, alias = resolve_expression_field(value, compiler.query)
         return f"{alias}.{field}"
     return value
 
@@ -1609,11 +1624,17 @@ class Proximity(Expression):
 
 class JsonOp(Expression):
     def __init__(
-        self, field: str, *keys: str, value: str | int | models.Value, **kwargs
+        self,
+        field: str,
+        *keys: str,
+        value: str | int | models.Value,
+        op: typing.Literal["@@@", "|||", "===", "###", "&&&"] = "@@@",
+        **kwargs,
     ):
         self.pfield = field
         self.keys = keys
         self.value = value
+        self.op = op
         super().__init__(
             output_field=kwargs.pop("output_field", models.BooleanField()),
             **kwargs,
@@ -1622,14 +1643,22 @@ class JsonOp(Expression):
     def as_sql(self, compiler, connection):
         _resolve_and_set_key_field(self.pfield, self, connection, compiler)
 
-        access_key = f"{self.pfield}{self.build_key(self.keys)}"
-        return f"{access_key} @@@ %s", [
+        op, access_key = self.build_key(self.keys)
+        if op is not None:
+            self.op = op
+
+        access_key = f"{self.pfield}{access_key}"
+        return f"{access_key} {self.op} %s", [
             _resolve_value(self.value, connection, compiler)
         ]
 
     @classmethod
     def build_key(self, keys):
-        native_python_dict_access_ke_string = []
+        native_python_dict_access_key_string = []
+        op = None
         for key in keys:
-            native_python_dict_access_ke_string.append("['{}']".format(key))
-        return "".join(native_python_dict_access_ke_string)
+            if key in ParadeOp.op_dict:
+                op = ParadeOp.op_dict[key]
+                break
+            native_python_dict_access_key_string.append("['{}']".format(key))
+        return op, "".join(native_python_dict_access_key_string)

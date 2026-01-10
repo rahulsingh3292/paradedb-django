@@ -2,7 +2,7 @@ import re
 import typing
 
 from django.db import models
-from django.db.models.expressions import Col
+from django.db.models.expressions import Col, ResolvedOuterRef
 
 
 class KeyField:
@@ -97,14 +97,18 @@ class TableField:
         return self.get_sql()
 
 
-def resolve_f_model_and_field(f_expr, query, connection=None):
-    if not isinstance(f_expr, models.F):
-        raise TypeError("Expected a models.F() expression")
+def resolve_expression_field(field_expr, query, connection=None):
+    if not isinstance(field_expr, (models.F, models.OuterRef)):
+        raise TypeError("Expected a (models.F, models.OuterRef) expression")
 
-    resolved = f_expr.resolve_expression(query)
+    resolved = field_expr.resolve_expression(query)
+    if isinstance(resolved, ResolvedOuterRef):
+        resolved = resolved.resolve_expression(query)
 
     if not isinstance(resolved, Col):
-        raise ValueError("Could not resolve F() expression into a column")
+        raise ValueError(
+            f"Could not resolve field ({field_expr}) expression into a column"
+        )
 
     field = resolved.target
     return field.model, field.name, resolved.alias
