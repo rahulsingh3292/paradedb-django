@@ -1,4 +1,4 @@
-# Inroduction
+# Indexes and Fields
 
 BM25 indexes in ParadeDB provide full-text search with relevance scoring. Creating a BM25 index is similar to creating a default Django index — you specify the fields to index, and you can use expressions or individual fields along with conditional expressions. Additional BM25-specific parameters, such as boosting, stopwords, and field normalization, can also be configured.
 

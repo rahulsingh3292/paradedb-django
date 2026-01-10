@@ -1,9 +1,12 @@
 
-#  Aggregates
+#  Aggregations
+
+ParadeDB allow fast aggregation. it executes the aggregate using the columnar portion of the ParadeDB index, which can significantly accelerate performance compared to vanilla Postgres.
 
 ---
 
-> ⚠ If the filter is applied and you encounter the error `query is incompatible with pg_search` when using an expression or lookup, try using the legacy ParadeDB function by passing the value as a dictionary or by using LookupParameter with legacy=True.
+!!! Note
+    -  If the filter is applied and you encounter the error `query is incompatible with pg_search` when using an expression or lookup, try using the legacy ParadeDB function by passing the value as a dictionary or by using LookupParameter with legacy=True.
 
 
 ---
@@ -55,7 +58,6 @@ Term(
 ```python
 from paradedb.expressions import All
 from paradedb.aggregates import Term, TermAggregateOrder, Count
-from paradedb.expressions import All
 
 # using count or _key
 Article.objects.aggregate(

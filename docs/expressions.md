@@ -1,4 +1,4 @@
-# Introduction
+# Expressions
 
 Expressions in **ParadeDB Django** define how search, filtering, and ranking logic is constructed in Django ORM queries.
 They translate your filters into ParadeDB-compatible queries for full-text or structured search.
@@ -29,6 +29,16 @@ They translate your filters into ParadeDB-compatible queries for full-text or st
 > - All the Expressions is inside the `paradedb.expressions` module
 
 ---
+
+
+## ParadeOp
+```python
+ParadeOp:
+    phrase = "###"
+    match = "|||"
+    match_conjunction = "&&&"
+    term = "==="
+```
 
 ## All
 
@@ -767,13 +777,24 @@ Article.objects.filter(
 ```
 
 ## JsonOp
-* supported in version - 0.20.5
+* supported in version - 0.20.5+
 
 ```python
-JsonOp(field: str, *keys: str, value: str | int | models.Value)
+JsonOp(field: str, *keys: str, value: str | int | models.Value, op: typing.Literal["@@@", "|||", "===", "###", "&&&"] = "@@@")
 ```
 
 Documentation link: -
+
+!!! info "Field Path Parsing Rule"
+
+    If a field path contains any of the following operators:
+
+    - `match`
+    - `phrase`
+    - `match_conjunction`
+    - `term`
+
+    **All keys that appear after the operator will be ignored.**
 
 **Example**
 ```python
@@ -781,4 +802,10 @@ from paradedb.expressions import JsonOp
 
 Article.objects.filter(JsonOp("metadata", "read_count", value=models.Value(1)))
 Article.objects.filter(JsonOp("metadata", "tags", "name", value='django'))
+
+
+# using paradedb custom operator with jsonfield
+Article.objects.filter(JsonOp("metadata", "tag", "name", "match", value='django'))
+# or use with op parameter
+Article.objects.filter(JsonOp("metadata", "tag", "name", value='django', op='|||'))
 ```

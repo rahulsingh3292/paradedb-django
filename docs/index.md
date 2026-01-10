@@ -16,56 +16,94 @@
 ---
 
 ## Features
-- Full-text search backed by ParadeDB’s BM25 index
-- Rich expression and lookups: `Match`, `Range`, `Term`,  `Boolean`, range queries, and more
--  Aggregation
--  Extension for ParadeDB `pg_search`
-- Support V2 Syntax
-- And More ...
+- Full-text search backed by ParadeDB’s **BM25** index
+- Rich expressions and lookups:
+  - `Match`
+  - `Range`
+  - `Term`
+  - `Boolean`
+  - Range queries and more
+- Aggregations
+- Extension support for ParadeDB `pg_search`
+- Support for **V2 syntax**
+- Custom ParadeDB operators for `JSONField`
+  (see [JsonOp Expression](./expressions.md#jsonop))
+- And more...
 
 ---
 
-## Supported Version
+## Supported Versions
 
-- > 0.19.11 - 0.20+
+- **>= 0.19.11**
+- **0.20+**
 
-----
+---
 
-## Install on ubuntu
+## Install on Ubuntu
 
-``` bash
+```bash
 sudo apt-get install -y libicu70
 curl -L "https://github.com/paradedb/paradedb/releases/download/v0.19.6/postgresql-17-pg-search_0.19.6-1PARADEDB-noble_amd64.deb" -o /tmp/pg_search.deb
 sudo apt-get install -y /tmp/*.deb
 ```
-in the `postgresql.conf`
-``` bash
+
+### Configure PostgreSQL
+
+Edit `postgresql.conf`
+
+```bash
 shared_preload_libraries = 'pg_search'
 ```
-create the extension
-``` bash
+
+Restart PostgreSQL and create the extension:
+
+```sql
 CREATE EXTENSION IF NOT EXISTS pg_search;
 ```
 
-> * Facing Issues or need more detail, see ParadeDb installation [Manually](https://docs.paradedb.com/deploy/self-hosted/extension) or via [Docker](https://docs.paradedb.com/deploy/self-hosted/docker)
+> ⚠ Facing issues or need more details?
+> See ParadeDB installation:
+>
+> * [Manual Installation](https://docs.paradedb.com/deploy/self-hosted/extension)
+> * [Docker Setup](https://docs.paradedb.com/deploy/self-hosted/docker)
 
 ---
 
+## Install Python Package
 
-##  Install
 Make sure the `pg_search` extension from ParadeDB is installed in your PostgreSQL database.
-If it is not installed, see the [**Installation**](https://docs.paradedb.com/documentation/getting-started/install) section below. <br>
+
+If not installed, see:
+[Installation Guide](https://docs.paradedb.com/documentation/getting-started/install)
 
 ```bash
 pip install paradedb-django
 ```
 
-## Add to **installed_apps**
-```bash
+---
+
+## Add to `INSTALLED_APPS`
+
+```python
 INSTALLED_APPS = [
     ...,
-    'paradedb'
+    'paradedb',
 ]
 ```
+
+---
+
+## You're Ready 🚀
+
+You can now start using ParadeDB features inside Django.
+
+---
+
+## 📚 Learn More
+* [Getting Started](./getting-started.md)
+* [Expressions](./expressions.md)
+* [Indexes](./index.md)
+* [Aggregations](./aggregations.md)
+* [Lookups](./lookups.md)
 
 ---

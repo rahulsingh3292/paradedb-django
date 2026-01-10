@@ -16,6 +16,7 @@ from paradedb.expressions import (
     JsonOp,
     Match,
     MoreLikeThis,
+    ParadeOp,
     Parse,
     ParseWithField,
     Phrase,
@@ -249,3 +250,23 @@ class TestExpressions(TestCase):
             JsonOp("metadata", "tags", "name", value="title")
         )
         bool(_2_path[:1])
+
+    def test_lookup_json_op_with_custom_operator(self):
+        match = Article.objects.filter(
+            JsonOp("metadata", "tag", "name", value="django", op=ParadeOp.match)
+        )
+        bool(match[:1])
+        phrase = Article.objects.filter(
+            JsonOp("metadata", "tag", "name", value="django", op=ParadeOp.phrase)
+        )
+        bool(phrase[:1])
+        term = Article.objects.filter(
+            JsonOp("metadata", "tag", "name", value="django", op=ParadeOp.term)
+        )
+        bool(term[:1])
+        conjunction = Article.objects.filter(
+            JsonOp(
+                "metadata", "tag", "name", value="django", op=ParadeOp.match_conjunction
+            )
+        )
+        bool(conjunction[:1])
