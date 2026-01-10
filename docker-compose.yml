@@ -1,9 +1,9 @@
 version: "3.9"
 
 services:
-  postgres:
-    image: paradedb/paradedb:0.20.5
-    container_name: postgres
+  paradedb:
+    image: paradedb/paradedb:0.21.0
+    container_name: paradedb
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 12345
@@ -21,4 +21,4 @@ services:
       start_period: 30s
 
 volumes:
-  database_data:
+   database_data:
