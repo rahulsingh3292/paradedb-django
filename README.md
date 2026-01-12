@@ -114,7 +114,7 @@ results.explain()
 
 ---
 
-## JSON Field Search
+## JSON SubScript Field Search
 
 Assume stored JSON:
 
@@ -188,6 +188,32 @@ results = Article.objects.filter(
 
 ---
 
+## Using V2 API with normal fields and Json, Array fields Querying
+
+operator lookups - `match_v2`, `phrase_v2`, `match_conjunction`, `term_v2`
+
+### Term
+
+```python
+from django.db import models
+from paradedb.cast import ValueCast
+
+# query using normal fields
+results = Article.objects.filter(models.Q(title__term_v2='djangp'))
+
+# query using v2 value using cast with tokenizer
+results = Article.objects.filter(models.Q(title__term_v2=ValueCast('django', 'pdb.ngram(2,2)')))
+
+# query jsonfield
+results = Article.objects.filter(models.Q(metadata__framework__term_v2='django')) # value can be passed as valuecast also
+
+# query array field
+results = Article.objects.filter(tags__term_v2='django')
+
+```
+
+---
+
 ## Mixing ParadeDB Search + ORM
 
 ```python
@@ -210,7 +236,7 @@ article_aggregated_count = Article.objects.aggregate(count=Count('id', filter=mo
 print(article_aggregated_count)
 
 avg_read_time_data = Article.objects.aggregate(avg_reading_time=Avg('metadata.reading_time', filter=models.Q(id__all=True)))
-print(avg_read_time_data) kw
+print(avg_read_time_data)
 
 ```
 
