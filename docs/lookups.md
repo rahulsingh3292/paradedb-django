@@ -257,19 +257,19 @@ Article.objects.filter(title__match_v2=ValueCast('django', 'pdb.ngram(1,2)'))
 
 ---
 
-## __match_v2_conjunction
+## __match_conjunction
 
 **Expression:** [Search](./expressions.md#search)
 
 **Example:**
 
 ```python
-Article.objects.filter(title__match_v2_conjunction='django')
+Article.objects.filter(title__match_conjunction='django')
 
 # using value with custom tokenizer
 from paradedb.cast import ValueCast
 
-Article.objects.filter(title__match_v2_conjunction=ValueCast('django', 'pdb.ngram(1,2)'))
+Article.objects.filter(title__match_conjunction=ValueCast('django', 'pdb.ngram(1,2)'))
 ```
 
 ---
