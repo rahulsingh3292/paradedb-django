@@ -777,6 +777,8 @@ Article.objects.filter(
 ```
 
 ## JsonOp
+
+* ParadeDB Json SubScript Querying
 * supported in version - 0.20.5+
 
 ```python
