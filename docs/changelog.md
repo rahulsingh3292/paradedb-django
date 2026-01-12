@@ -1,3 +1,6 @@
+## 1.3.1
+- feature: Add full support for JSON and arrayfield queries
+
 ## 1.3.0
 - feature: Add ParadeDB custom operator filtering support for jsonfield ([JsonOp Expression](./expressions.md#jsonop))
 - feature: Add Support for subquery `models.OuterRef()` field in expressions
