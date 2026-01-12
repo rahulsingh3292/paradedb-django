@@ -1,5 +1,12 @@
 from django.apps import apps
 from django.db import models
+
+
+try:
+    from django.contrib.postgres.fields import ArrayField
+except ImportError:
+    ArrayField = models.JSONField  # type: ignore
+
 from django.db.models import (
     CharField,
     ForeignKey,
@@ -26,6 +33,7 @@ from .expressions import (
     JsonOp,
     Match,
     MoreLikeThis,
+    ParadeOp,
     Parse,
     ParseWithField,
     Phrase,
@@ -68,12 +76,13 @@ __all__ = [
     "ParseLookup",
     "SnippetLookup",
     "RelatedTableTransform",
+    "ProximityLookup",
+    "JsonOpLookup",
+    "ParadeLookup",
     "MatchV2Lookup",
     "MatchConjunctionLookup",
     "PhraseV2Lookup",
     "TermV2Lookup",
-    "ProximityLookup",
-    "JsonOpLookup",
 ]
 
 
@@ -428,29 +437,29 @@ class RelatedTableTransform(models.Transform):
         return sql, lhs_params
 
 
-# V2 lookup
-@register_lookup_for_all_fields
-class MatchV2Lookup(SearchLookup):
-    lookup_name = "match_v2"
-    extra_param_kwargs = {"op": "|||"}
+# # V2 lookup
+# @register_lookup_for_all_fields
+# class MatchV2Lookup(SearchLookup):
+#     lookup_name = "match_v2"
+#     extra_param_kwargs = {"op": "|||"}
 
 
-@register_lookup_for_all_fields
-class MatchConjunctionLookup(SearchLookup):
-    lookup_name = "match_v2_conjunction"
-    extra_param_kwargs = {"op": "&&&"}
+# @register_lookup_for_all_fields
+# class MatchConjunctionLookup(SearchLookup):
+#     lookup_name = "match_v2_conjunction"
+#     extra_param_kwargs = {"op": "&&&"}
 
 
-@register_lookup_for_all_fields
-class PhraseV2Lookup(SearchLookup):
-    lookup_name = "phrase_v2"
-    extra_param_kwargs = {"op": "###"}
+# @register_lookup_for_all_fields
+# class PhraseV2Lookup(SearchLookup):
+#     lookup_name = "phrase_v2"
+#     extra_param_kwargs = {"op": "###"}
 
 
-@register_lookup_for_all_fields
-class TermV2Lookup(SearchLookup):
-    lookup_name = "term_v2"
-    extra_param_kwargs = {"op": "==="}
+# @register_lookup_for_all_fields
+# class TermV2Lookup(SearchLookup):
+#     lookup_name = "term_v2"
+#     extra_param_kwargs = {"op": "==="}
 
 
 @register_lookup_for_all_fields
@@ -473,8 +482,13 @@ class JsonOpLookup(models.Lookup):
     def as_sql(self, compiler, connection):
         lhs_sql, lhs_params = compiler.compile(self.lhs)
         split_by = "#>"
+
         if "->" in lhs_sql:
             split_by = "->"
+
+        if "->>" in lhs_sql:
+            split_by = "->>"
+
         keys = lhs_params[0]
         if not isinstance(keys, (list, tuple)):
             keys = [keys]
@@ -482,4 +496,68 @@ class JsonOpLookup(models.Lookup):
         return JsonOp(field, *keys, value=self.rhs).as_sql(compiler, connection)
 
 
-register_lookup_for_all_fields(JsonOpLookup, extra_fields=[models.JSONField])
+register_lookup_for_all_fields(
+    JsonOpLookup, extra_fields=[models.JSONField, ArrayField]
+)
+
+# V2 lookups
+
+
+class BaseParadeDbV2Lookup(Lookup):
+    op = None
+
+    def as_sql(self, compiler, connection):
+        lhs_sql, lhs_params = compiler.compile(self.lhs)
+        if not isinstance(self.rhs, str):
+            self.rhs_sql, self.rhs_params = compiler.compile(self.rhs)
+        else:
+            self.rhs_sql, self.rhs_params = "%s", (self.rhs,)
+        return (
+            f"{lhs_sql} {self.op} {self.rhs_sql}",
+            list(lhs_params or []) + list(self.rhs_params or []),
+        )
+
+
+## V2 lookups for all fields
+
+
+class ParadeLookup(BaseParadeDbV2Lookup):
+    lookup_name = "pdb"
+    op = "@@@"
+
+
+class TermV2Lookup(BaseParadeDbV2Lookup):
+    lookup_name = "term_v2"
+    op = ParadeOp.term
+
+
+class MatchV2Lookup(BaseParadeDbV2Lookup):
+    lookup_name = "match_v2"
+    op = ParadeOp.match
+
+
+class MatchConjunctionLookup(BaseParadeDbV2Lookup):
+    lookup_name = "match_conjunction"
+    op = ParadeOp.match_conjunction
+
+
+class PhraseV2Lookup(BaseParadeDbV2Lookup):
+    lookup_name = "phrase_v2"
+    op = ParadeOp.phrase
+
+
+register_lookup_for_all_fields(
+    ParadeLookup, extra_fields=[models.JSONField, ArrayField]
+)
+register_lookup_for_all_fields(
+    TermV2Lookup, extra_fields=[models.JSONField, ArrayField]
+)
+register_lookup_for_all_fields(
+    MatchV2Lookup, extra_fields=[models.JSONField, ArrayField]
+)
+register_lookup_for_all_fields(
+    MatchConjunctionLookup, extra_fields=[models.JSONField, ArrayField]
+)
+register_lookup_for_all_fields(
+    PhraseV2Lookup, extra_fields=[models.JSONField, ArrayField]
+)

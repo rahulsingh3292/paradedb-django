@@ -177,41 +177,85 @@ class TestExpressions(TestCase):
     # V2 LOOKUPS
     # -------------------------
 
-    def test_lookup_match_v2(self):
-        qs = Article.objects.filter(title__match_v2="hi")
-        bool(qs[:1])
-
-    def test_lookup_match_v2_cast(self):
-        qs = Article.objects.filter(
-            title__match_v2=ValueCast("match cast", "pdb.literal")
-        )
-        bool(qs[:1])
-
-    def test_lookup_phrase_v2_cast(self):
-        qs = Article.objects.filter(
-            description__phrase_v2=ValueCast("pharse cast", "pdb.ngram(1,2)")
-        )
-        bool(qs[:1])
-
-    def test_lookup_phrase_v2(self):
-        qs = Article.objects.filter(description__phrase_v2="phrase")
-        bool(qs[:1])
-
-    def test_lookup_match_v2_conjunction(self):
-        qs = Article.objects.filter(title__match_v2_conjunction="cojunction")
-        bool(qs[:1])
-
-    def test_lookup_match_v2_conjunction_cast(self):
-        qs = Article.objects.filter(
-            title__match_v2_conjunction=ValueCast(
-                "cojunction cast",
-                "pdb.whitespace",
-            )
-        )
-        bool(qs[:1])
-
     def test_lookup_term_v2(self):
         qs = Article.objects.filter(title__term_v2="term")
+        bool(qs[:1])
+
+        qs_with_cast = Article.objects.filter(
+            title__term_v2=ValueCast("term cast", "pdb.whitespace")
+        )
+        bool(qs_with_cast[:1])
+
+        qs_with_json_simple = Article.objects.filter(metadata__field1__term_v2="term")
+        bool(qs_with_json_simple[:1])
+
+        qs_with_json_cast = Article.objects.filter(
+            metadata__field1__term_v2=ValueCast("term cast", "pdb.whitespace")
+        )
+        bool(qs_with_json_cast[:1])
+
+    def test_match_v2(self):
+        qs = Article.objects.filter(title__match_v2="django")
+        bool(qs[:1])
+
+        qs_with_cast = Article.objects.filter(
+            title__match_v2=ValueCast("django", "pdb.whitespace")
+        )
+        bool(qs_with_cast[:1])
+
+        qs_with_json_simple = Article.objects.filter(
+            metadata__field1__match_v2="django"
+        )
+        bool(qs_with_json_simple[:1])
+
+        qs_with_json_cast = Article.objects.filter(
+            metadata__field1__match_v2=ValueCast("django", "pdb.whitespace")
+        )
+        bool(qs_with_json_cast[:1])
+
+    def test_phrase_v2(self):
+        qs = Article.objects.filter(title__phrase_v2="django")
+        bool(qs[:1])
+
+        qs_with_cast = Article.objects.filter(
+            title__phrase_v2=ValueCast("django", "pdb.whitespace")
+        )
+        bool(qs_with_cast[:1])
+
+        qs_with_json_simple = Article.objects.filter(
+            metadata__field1__phrase_v2="django"
+        )
+        bool(qs_with_json_simple[:1])
+
+        qs_with_json_cast = Article.objects.filter(
+            metadata__field1__phrase_v2=ValueCast("django", "pdb.whitespace")
+        )
+        bool(qs_with_json_cast[:1])
+
+    def test_match_cojunction_v2(self):
+        qs = Article.objects.filter(title__match_conjunction="django")
+        bool(qs[:1])
+
+        qs_with_cast = Article.objects.filter(
+            title__match_conjunction=ValueCast("django", "pdb.whitespace")
+        )
+        bool(qs_with_cast[:1])
+
+        qs_with_json_simple = Article.objects.filter(
+            metadata__field1__match_conjunction="django"
+        )
+        bool(qs_with_json_simple[:1])
+
+        qs_with_json_cast = Article.objects.filter(
+            metadata__field1__field_2__match_conjunction=ValueCast(
+                "django", "pdb.whitespace"
+            )
+        )
+        bool(qs_with_json_cast[:1])
+
+    # others
+    def test_pdb(self):
+        qs = Article.objects.filter(title__pdb="django")
         bool(qs[:1])
 
     def test_lookup_proximity_v2(self):
@@ -249,3 +293,38 @@ class TestExpressions(TestCase):
             metadata__field1__f2__match_conjunction__json_op="django"
         )
         bool(conjunction[:1])
+
+    def test_v2_on_array_field(self):
+        array_with_term = Article.objects.filter(tags__term_v2="django")
+        bool(array_with_term[:1])
+
+        array_with_cast = Article.objects.filter(
+            tags__term_v2=ValueCast("django", "pdb.whitespace")
+        )
+        bool(array_with_cast[:1])
+
+        array_with_phrase = Article.objects.filter(tags__phrase_v2="django")
+        bool(array_with_phrase[:1])
+
+        array_with_cast = Article.objects.filter(
+            tags__phrase_v2=ValueCast("django", "pdb.whitespace")
+        )
+        bool(array_with_cast[:1])
+
+        array_with_match = Article.objects.filter(tags__match_v2="django")
+        bool(array_with_match[:1])
+
+        array_with_cast = Article.objects.filter(
+            tags__match_v2=ValueCast("django", "pdb.whitespace")
+        )
+        bool(array_with_cast[:1])
+
+        array_with_match_conjunction = Article.objects.filter(
+            tags__match_conjunction="django"
+        )
+        bool(array_with_match_conjunction[:1])
+
+        array_with_cast = Article.objects.filter(
+            tags__match_conjunction=ValueCast("django", "pdb.whitespace")
+        )
+        bool(array_with_cast[:1])

@@ -26,7 +26,8 @@
 - Aggregations
 - Extension support for ParadeDB `pg_search`
 - Support for **V2 syntax**
-- Custom ParadeDB operators for `JSONField`
+- Full Json and Arrayfield Query Support
+- Custom ParadeDB operators for `JSONField` and SubScript
   (see [JsonOp Expression](./expressions.md#jsonop))
 - And more...
 

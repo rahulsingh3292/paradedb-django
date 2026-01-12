@@ -4,8 +4,8 @@ This guide shows how to:
 
 * Define a Django model with a **BM25 index**
 * Perform **full-text search**
-* Query **JSON fields**
-* Use **custom ParadeDB operators** (`match`, `term`, `phrase`, `match_conjunction`)
+* Query **JSON and Array fields**
+* Use **custom ParadeDB operators with Json SubScripting** (`match`, `term`, `phrase`, `match_conjunction`)
 * Combine ParadeDB search with Django ORM filters
 * Aggregation
 
@@ -108,7 +108,7 @@ results.explain()
 
 ---
 
-## JSON Field Search
+## JSON SubScript Field Search
 
 Assume stored JSON:
 
@@ -181,6 +181,31 @@ results = Article.objects.filter(
 ```
 
 ---
+
+## Using V2 API with normal fields and Json, Array fields Querying
+
+operator lookups - `match_v2`, `phrase_v2`, `match_conjunction`, `term_v2`
+
+```python
+from django.db import models
+from paradedb.cast import ValueCast
+
+# query using normal fields
+results = Article.objects.filter(models.Q(title__term_v2='djangp'))
+
+# query using v2 value using cast with tokenizer
+results = Article.objects.filter(models.Q(title__term_v2=ValueCast('django', 'pdb.ngram(2,2)')))
+
+# query jsonfield
+results = Article.objects.filter(models.Q(metadata__framework__term_v2='django')) # value can be passed as valuecast also
+
+# query array field
+results = Article.objects.filter(tags__term_v2='django')
+
+```
+
+---
+
 
 ## Mixing ParadeDB Search + ORM
 
