@@ -16,6 +16,23 @@
   ">See the Documentation</a>
 </p>
 
+---
+
+<div align="center">
+
+![PyPI](https://img.shields.io/pypi/v/paradedb-django)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/paradedb-django)
+![Python](https://img.shields.io/pypi/pyversions/paradedb-django)
+[![CI](https://github.com/rahulsingh3292/paradedb-django/actions/workflows/build-test.yml/badge.svg)](
+https://github.com/rahulsingh3292/paradedb-django/actions/workflows/build-test.yml
+)
+![Issues](https://img.shields.io/github/issues/rahulsingh3292/paradedb-django)
+![Stars](https://img.shields.io/github/stars/rahulsingh3292/paradedb-django?style=social)
+![forks](https://img.shields.io/github/forks/rahulsingh3292/paradedb-django?style=social)
+![Visitors](https://visitor-badge.laobi.icu/badge?page_id=rahulsingh3292.paradedb-django)
+</div>
+
+---
 
 ##  Quick Example
 
