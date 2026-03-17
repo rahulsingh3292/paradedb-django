@@ -15,7 +15,7 @@
 
 
 <br/>
-<div align="center">
+<div align="center" markdown="1">
 
 ![PyPI](https://img.shields.io/pypi/v/paradedb-django)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/paradedb-django)
